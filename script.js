@@ -1,60 +1,135 @@
 let cart = [];
 
+// ADD HAMPER
 function addHamper(name, price) {
 
-    cart.push({
-        name: name,
-        price: price
-    });
+    const existing = cart.find(item => item.name === name);
+
+    if (existing) {
+        existing.quantity++;
+    } else {
+        cart.push({
+            name: name,
+            price: price,
+            quantity: 1
+        });
+    }
 
     updateCart();
-    openCart();
+
+    alert(name + " added to cart 🛒");
 }
 
 
+// UPDATE CART COUNT
 function updateCart() {
 
+    const count = document.getElementById("cartCount");
+
+    if (!count) return;
+
+    let totalItems = 0;
+
+    cart.forEach(item => {
+        totalItems += item.quantity;
+    });
+
+    count.innerText = totalItems;
+
+    displayCart();
+}
+
+
+// DISPLAY CART
+function displayCart() {
+
     const cartItems = document.getElementById("cartItems");
-    const cartCount = document.getElementById("cartCount");
     const cartTotal = document.getElementById("cartTotal");
 
-    cartCount.innerText = cart.length;
+    if (!cartItems || !cartTotal) return;
 
     if (cart.length === 0) {
 
-        cartItems.innerHTML = "<p>Your cart is empty.</p>";
+        cartItems.innerHTML = `
+            <p>Your cart is empty 🛒</p>
+        `;
+
         cartTotal.innerText = "0";
 
         return;
     }
 
+    let html = "";
     let total = 0;
-
-    cartItems.innerHTML = "";
 
     cart.forEach((item, index) => {
 
-        total += item.price;
+        const itemTotal = item.price * item.quantity;
 
-        cartItems.innerHTML += `
+        total += itemTotal;
+
+        html += `
             <div class="cart-item">
 
-                <strong>${item.name}</strong>
+                <div>
+                    <strong>${item.name}</strong>
+                    <p>₹${item.price} × ${item.quantity}</p>
+                </div>
 
-                <p>₹${item.price}</p>
+                <div>
 
-                <button onclick="removeItem(${index})">
-                    Remove
-                </button>
+                    <button onclick="decreaseQuantity(${index})">
+                        −
+                    </button>
+
+                    <span>${item.quantity}</span>
+
+                    <button onclick="increaseQuantity(${index})">
+                        +
+                    </button>
+
+                    <button onclick="removeItem(${index})">
+                        🗑️
+                    </button>
+
+                </div>
 
             </div>
         `;
     });
 
+    cartItems.innerHTML = html;
+
     cartTotal.innerText = total;
 }
 
 
+// PLUS
+function increaseQuantity(index) {
+
+    cart[index].quantity++;
+
+    updateCart();
+}
+
+
+// MINUS
+function decreaseQuantity(index) {
+
+    if (cart[index].quantity > 1) {
+
+        cart[index].quantity--;
+
+    } else {
+
+        cart.splice(index, 1);
+    }
+
+    updateCart();
+}
+
+
+// REMOVE
 function removeItem(index) {
 
     cart.splice(index, 1);
@@ -63,183 +138,147 @@ function removeItem(index) {
 }
 
 
+// OPEN CART
 function openCart() {
 
-    document
-        .getElementById("cart")
-        .classList.add("open");
-}
+    const modal = document.getElementById("cartModal");
 
-
-function closeCart() {
-
-    document
-        .getElementById("cart")
-        .classList.remove("open");
-}
-
-
-function goToCheckout() {
-
-    closeCart();
-
-    document
-        .getElementById("checkout")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
-}
-
-
-function requestCustomHamper() {
-
-    const selected =
-        document.querySelectorAll(
-            ".product-option input:checked"
-        );
-
-    if (selected.length === 0) {
-
-        alert(
-            "Please select at least one product."
-        );
-
-        return;
+    if (modal) {
+        modal.style.display = "flex";
     }
 
-    let products = [];
-
-    selected.forEach(product => {
-
-        products.push(product.value);
-
-    });
-
-    alert(
-        "Customized hamper request received!\n\n" +
-        "Selected products:\n" +
-        products.join(", ") +
-        "\n\n" +
-        "We will contact you with the final price."
-    );
+    displayCart();
 }
 
 
-function placeOrder() {
+// CLOSE CART
+function closeCart() {
+
+    const modal = document.getElementById("cartModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+// CUSTOMER FORM
+function showCustomerForm() {
 
     if (cart.length === 0) {
 
-        alert(
-            "Please add a hamper to your cart first."
-        );
+        alert("Please add a hamper to your cart first 🛒");
 
         return;
     }
 
+    closeCart();
 
-    const name =
-        document.getElementById(
-            "customerName"
-        ).value.trim();
+    const modal = document.getElementById("customerModal");
 
-
-    const phone =
-        document.getElementById(
-            "customerPhone"
-        ).value.trim();
-
-
-    const address =
-        document.getElementById(
-            "customerAddress"
-        ).value.trim();
-
-
-    const city =
-        document.getElementById(
-            "customerCity"
-        ).value.trim();
-
-
-    const state =
-        document.getElementById(
-            "customerState"
-        ).value.trim();
-
-
-    const pincode =
-        document.getElementById(
-            "customerPincode"
-        ).value.trim();
-
-
-    if (
-        !name ||
-        !phone ||
-        !address ||
-        !city ||
-        !state ||
-        !pincode
-    ) {
-
-        alert(
-            "Please fill all required details."
-        );
-
-        return;
+    if (modal) {
+        modal.style.display = "flex";
     }
+}
 
 
-    const payment =
-        document.querySelector(
-            'input[name="payment"]:checked'
-        ).value;
+// CLOSE CUSTOMER FORM
+function closeCustomerForm() {
+
+    const modal = document.getElementById("customerModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
 
 
-    let total = 0;
+// PLACE ORDER
+const orderForm = document.getElementById("orderForm");
 
-    cart.forEach(item => {
+if (orderForm) {
 
-        total += item.price;
+    orderForm.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const name =
+            document.getElementById("customerName").value.trim();
+
+        const phone =
+            document.getElementById("customerPhone").value.trim();
+
+        const address =
+            document.getElementById("customerAddress").value.trim();
+
+        const city =
+            document.getElementById("customerCity").value.trim();
+
+        const state =
+            document.getElementById("customerState").value.trim();
+
+        const pin =
+            document.getElementById("customerPin").value.trim();
+
+        const payment =
+            document.querySelector(
+                'input[name="payment"]:checked'
+            ).value;
+
+
+        let total = 0;
+
+        cart.forEach(item => {
+
+            total += item.price * item.quantity;
+
+        });
+
+
+        if (payment === "COD") {
+
+            alert(
+                "🎉 ORDER PLACED SUCCESSFULLY!\n\n" +
+
+                "Customer: " + name + "\n" +
+
+                "Mobile: " + phone + "\n\n" +
+
+                "Address:\n" +
+                address + "\n" +
+                city + ", " +
+                state + " - " +
+                pin + "\n\n" +
+
+                "Payment: Cash on Delivery\n" +
+
+                "Total: ₹" + total
+            );
+
+
+            cart = [];
+
+            updateCart();
+
+            closeCustomerForm();
+
+            orderForm.reset();
+
+        }
+
+
+        if (payment === "ONLINE") {
+
+            alert(
+                "Online payment will be connected next. 💳\n\n" +
+                "Order Amount: ₹" + total
+            );
+
+        }
 
     });
-
-
-    const order = {
-
-        name: name,
-        phone: phone,
-        address: address,
-        city: city,
-        state: state,
-        pincode: pincode,
-
-        items: cart,
-
-        total: total,
-
-        paymentMethod: payment
-
-    };
-
-
-    console.log(order);
-
-
-    if (payment === "COD") {
-
-        alert(
-            "COD order received!\n\n" +
-            "Name: " + name +
-            "\nAmount: ₹" + total
-        );
-
-    } else {
-
-        alert(
-            "Online payment will be connected after the secure payment backend is added."
-        );
-
-    }
-
 }
+
+
+// START CART
+updateCart();
