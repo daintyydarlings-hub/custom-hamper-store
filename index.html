@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Custom Hamper Store</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff7fb;
+            color: #3d2635;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #8e3d72;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3d2635;
+            margin-left: 20px;
+            font-weight: 600;
+        }
+
+        .cart-button {
+            border: none;
+            background: #8e3d72;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #ffe4f1, #f7d9ff);
+        }
+
+        .hero h1 {
+            font-size: 45px;
+            margin-bottom: 15px;
+            color: #702653;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        .hero button,
+        .main-button {
+            background: #8e3d72;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        section {
+            padding: 60px 6%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            color: #702653;
+            margin-bottom: 8px;
+        }
+
+        .hamper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .hamper-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .hamper-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .hamper-image {
+            height: 220px;
+            background: #f3d5e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+        }
+
+        .hamper-content {
+            padding: 22px;
+        }
+
+        .hamper-content h3 {
+            font-size: 25px;
+            color: #8e3d72;
+            margin-bottom: 12px;
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .products {
+            list-style: none;
+            line-height: 1.8;
+            color: #66505e;
+        }
+
+        .products li::before {
+            content: "♡ ";
+            color: #c04d8d;
+        }
+
+        .letter-section {
+            background: #fff0f7;
+        }
+
+        .letter-box {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .letter-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .letter-table th,
+        .letter-table td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .custom-section {
+            background: #f8edff;
+        }
+
+        .custom-box {
+            max-width: 850px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .product-select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .product-option {
+            border: 1px solid #ead5e3;
+            padding: 13px;
+            border-radius: 12px;
+            background: #fffafd;
+        }
+
+        .product-option input {
+            margin-right: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkout {
+            background: white;
+        }
+
+        .checkout-box {
+            max-width: 750px;
+            margin: auto;
+            padding: 30px;
+            background: #fff7fb;
+            border-radius: 20px;
+        }
+
+        .payment-option {
+            padding: 15px;
+            background: white;
+            border: 1px solid #ead5e3;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .cart {
+            position: fixed;
+            right: -420px;
+            top: 0;
+            width: 400px;
+            max-width: 95%;
+            height: 100%;
+            background: white;
+            z-index: 2000;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.15);
+            padding: 25px;
+            transition: 0.3s;
+            overflow-y: auto;
+        }
+
+        .cart.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .close-cart {
+            border: none;
+            background: #eee;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        footer {
+            background: #3d2635;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .success-message {
+            display: none;
+            padding: 20px;
+            background: #e8f8ee;
+            color: #176b35;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+
+            nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            section {
+                padding: 45px 5%;
+            }
+
+            .cart {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        💜 Dainty Darlings
+    </div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#hampers">Hampers</a>
+        <a href="#custom">Customize</a>
+        <a href="#checkout">Order</a>
+    </nav>
+
+    <button class="cart-button" onclick="openCart()">
+        🛒 Cart (<span id="cartCount">0</span>)
+    </button>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+    <h1>Make Someone's Day Special 💜</h1>
+
+    <p>
+        Beautifully curated hampers made with love.
+    </p>
+
+    <button onclick="document.getElementById('hampers').scrollIntoView()">
+        SHOP HAMPERS
+    </button>
+
+</section>
+
+
+<!-- HAMPERS -->
+
+<section id="hampers">
+
+    <div class="section-title">
+
+        <h2>Our Hampers 🎁</h2>
+
+        <p>
+            Choose the perfect hamper for your special someone.
+        </p>
+
+    </div>
+
+
+    <div class="hamper-grid">
+
+
+        <!-- 99 -->
+
+        <div class="hamper-card">
+
+            <div class="hamper-image">
+                🎁
+            </div>
+
+            <div class="hamper-content">
+
+                <h3>₹99 Hamper</h3>
+
+                <ul class="products">
+
+                    <li>Clutcher</li>
+                    <li>Key-chain</li>
+                    <li>Fun-clip</li>
+
+                </ul>
+
+                <div class="price">
+                    ₹99
+                </div>
+
+                <button class="main-button"
+                    onclick="addHamper('₹99 Hamper', 99)">
+                    ADD TO CART
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- 199 -->
+
+        <div class="hamper-card">
+
+            <div class="hamper-image">
+                🎀
+            </div>
+
+            <div class="hamper-content">
+
+                <h3>₹199 Hamper</h3>
+
+                <ul class="products">
+
+                    <li>Clutcher</li>
+                    <li>Key-chain</li>
+                    <li>Fun-clip</li>
+                    <li>Lip-balm</li>
+                    <li>Claw-clip</li>
+                    <li>Scrunchies</li>
+                    <li>Pair of studs</li>
+
+                </ul>
+
+                <div class="price">
+                    ₹199
+                </div>
+
+                <button class="main-button"
+                    onclick="addHamper('₹199 Hamper', 199)">
+                    ADD TO CART
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- 299 -->
+
+        <div class="hamper-card">
+
+            <div class="hamper-image">
+                💝
+            </div>
+
+            <div class="hamper-content">
+
+                <h3>₹299 Hamper</h3>
+
+                <ul class="products">
+
+                    <li>Clutcher</li>
+                    <li>Key-chain</li>
+                    <li>Fun-clip</li>
+                    <li>Lip-balm</li>
+                    <li>Claw-clip</li>
+                    <li>Scrunchies</li>
+                    <li>Pair of studs</li>
+                    <li>Chain</li>
+                    <li>Handwritten Letter FREE</li>
+
+                </ul>
+
+                <div class="price">
+                    ₹299
+                </div>
+
+                <button class="main-button"
+                    onclick="addHamper('₹299 Hamper', 299)">
+                    ADD TO CART
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- 399 -->
+
+        <div class="hamper-card">
+
+            <div class="hamper-image">
+                💜
+            </div>
+
+            <div class="hamper-content">
+
+                <h3>₹399 Hamper</h3>
+
+                <ul class="products">
+
+                    <li>Clutcher</li>
+                    <li>Key-chain</li>
+                    <li>Fun-clip</li>
+                    <li>Lip-balm</li>
+                    <li>Claw-clip</li>
+                    <li>Scrunchies</li>
+                    <li>Pair of studs</li>
+                    <li>Chain</li>
+                    <li>Phone charm</li>
+                    <li>Chocolates</li>
+                    <li>Handwritten Letter FREE</li>
+
+                </ul>
+
+                <div class="price">
+                    ₹399
+                </div>
+
+                <button class="main-button"
+                    onclick="addHamper('₹399 Hamper', 399)">
+                    ADD TO CART
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- LETTER -->
+
+<section class="letter-section">
+
+    <div class="section-title">
+
+        <h2>💌 Handwritten Letter Add-On</h2>
+
+        <p>
+            Add a personal touch with a heartfelt handwritten letter! 💜
+        </p>
+
+    </div>
+
+    <div class="letter-box">
+
+        <table class="letter-table">
+
+            <tr>
+                <th>Hamper</th>
+                <th>Handwritten Letter</th>
+            </tr>
+
+            <tr>
+                <td>₹99 Hamper</td>
+                <td>₹30 extra</td>
+            </tr>
+
+            <tr>
+                <td>₹199 Hamper</td>
+                <td>₹30 extra</td>
+            </tr>
+
+            <tr>
+                <td>₹299 Hamper</td>
+                <td>FREE</td>
+            </tr>
+
+            <tr>
+                <td>₹399 Hamper</td>
+                <td>FREE</td>
+            </tr>
+
+        </table>
+
+        <div class="form-group">
+
+            <label>
+                Your handwritten message
+            </label>
+
+            <textarea
+                id="letterMessage"
+                placeholder="Write your heartfelt message here...">
+            </textarea>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CUSTOMIZED -->
+
+<section class="custom-section" id="custom">
+
+    <div class="section-title">
+
+        <h2>🎁 Customized Hamper</h2>
+
+        <p>
+            Create a hamper specially for your loved one.
+        </p>
+
+    </div>
+
+
+    <div class="custom-box">
+
+        <h3>Select Your Products</h3>
+
+        <div class="product-select-grid">
+
+            <label class="product-option">
+                <input type="checkbox" value="Clutcher">
+                Clutcher
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Key-chain">
+                Key-chain
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Fun-clip">
+                Fun-clip
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Lip-balm">
+                Lip-balm
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Claw-clip">
+                Claw-clip
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Scrunchies">
+                Scrunchies
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Pair of studs">
+                Pair of studs
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Chain">
+                Chain
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Phone charm">
+                Phone charm
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Chocolates">
+                Chocolates
+            </label>
+
+            <label class="product-option">
+                <input type="checkbox" value="Handwritten Letter">
+                Handwritten Letter
+            </label>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Customization Details
+            </label>
+
+            <textarea
+                id="customDetails"
+                placeholder="Tell us how you want your hamper customized...">
+            </textarea>
+
+        </div>
+
+
+        <p style="margin-bottom:20px;">
+
+            <strong>
+                Price will be decided based on your selected products & customization.
+            </strong>
+
+        </p>
+
+
+        <button class="main-button"
+            onclick="requestCustomHamper()">
+
+            REQUEST CUSTOM HAMPER
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- CHECKOUT -->
+
+<section class="checkout" id="checkout">
+
+    <div class="section-title">
+
+        <h2>📦 Checkout</h2>
+
+        <p>
+            Enter your delivery details.
+        </p>
+
+    </div>
+
+
+    <div class="checkout-box">
+
+        <div id="successMessage" class="success-message">
+            Your order has been prepared successfully!
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Full Name *</label>
+
+            <input
+                type="text"
+                id="customerName"
+                placeholder="Enter your full name">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Mobile Number *</label>
+
+            <input
+                type="tel"
+                id="customerPhone"
+                placeholder="Enter your mobile number">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Address *</label>
+
+            <textarea
+                id="customerAddress"
+                placeholder="House / Building / Street / Area">
+            </textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>City *</label>
+
+            <input
+                type="text"
+                id="customerCity"
+                placeholder="Enter your city">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>State *</label>
+
+            <input
+                type="text"
+                id="customerState"
+                placeholder="Enter your state">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Pincode *</label>
+
+            <input
+                type="text"
+                id="customerPincode"
+                placeholder="Enter your pincode">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Special Instructions</label>
+
+            <textarea
+                id="specialInstructions"
+                placeholder="Any special instructions...">
+            </textarea>
+
+        </div>
+
+
+        <h3 style="margin:25px 0 15px;">
+            💳 Payment Method
+        </h3>
+
+
+        <label class="payment-option">
+
+            <input
+                type="radio"
+                name="payment"
+                value="COD"
+                checked>
+
+            💵 Cash on Delivery
+
+        </label>
+
+
+        <label class="payment-option">
+
+            <input
+                type="radio"
+                name="payment"
+                value="ONLINE">
+
+            💳 Online Payment
+
+        </label>
+
+
+        <br>
+
+
+        <button
+            class="main-button"
+            onclick="placeOrder()">
+
+            PLACE ORDER
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- CART -->
+
+<div class="cart" id="cart">
+
+    <div class="cart-header">
+
+        <h2>🛒 Your Cart</h2>
+
+        <button
+            class="close-cart"
+            onclick="closeCart()">
+
+            ×
+
+        </button>
+
+    </div>
+
+
+    <div id="cartItems">
+
+        <p>Your cart is empty.</p>
+
+    </div>
+
+
+    <div class="cart-total">
+
+        Total: ₹<span id="cartTotal">0</span>
+
+    </div>
+
+
+    <button
+        class="main-button"
+        onclick="goToCheckout()">
+
+        PROCEED TO CHECKOUT
+
+    </button>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <h3>💜 Dainty Darlings</h3>
+
+    <p style="margin-top:10px;">
+        Made with love, just for you.
+    </p>
+
+    <p style="margin-top:10px;">
+        © 2026 Dainty Darlings. All rights reserved.
+    </p>
+
+</footer>
+
+
+<script>
+
+    let cart = [];
+
+
+    function addHamper(name, price) {
+
+        cart.push({
+            name: name,
+            price: price
+        });
+
+        updateCart();
+
+        openCart();
+
+    }
+
+
+    function updateCart() {
+
+        const cartItems =
+            document.getElementById("cartItems");
+
+        const cartCount =
+            document.getElementById("cartCount");
+
+        const cartTotal =
+            document.getElementById("cartTotal");
+
+
+        cartCount.innerText = cart.length;
+
+
+        if (cart.length === 0) {
+
+            cartItems.innerHTML =
+                "<p>Your cart is empty.</p>";
+
+            cartTotal.innerText = "0";
+
+            return;
+
+        }
+
+
+        let total = 0;
+
+
+        cartItems.innerHTML = "";
+
+
+        cart.forEach((item, index) => {
+
+            total += item.price;
+
+
+            cartItems.innerHTML += `
+
+                <div class="cart-item">
+
+                    <strong>${item.name}</strong>
+
+                    <p>₹${item.price}</p>
+
+                    <button
+                        onclick="removeItem(${index})"
+                        style="
+                        margin-top:8px;
+                        border:none;
+                        background:#ffe4ef;
+                        padding:7px 12px;
+                        border-radius:8px;
+                        cursor:pointer;">
+
+                        Remove
+
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
+
+        cartTotal.innerText = total;
+
+    }
+
+
+    function removeItem(index) {
+
+        cart.splice(index, 1);
+
+        updateCart();
+
+    }
+
+
+    function openCart() {
+
+        document
+            .getElementById("cart")
+            .classList.add("open");
+
+    }
+
+
+    function closeCart() {
+
+        document
+            .getElementById("cart")
+            .classList.remove("open");
+
+    }
+
+
+    function goToCheckout() {
+
+        closeCart();
+
+        document
+            .getElementById("checkout")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+    }
+
+
+    function requestCustomHamper() {
+
+        const selected =
+            document.querySelectorAll(
+                '.product-option input:checked'
+            );
+
+
+        if (selected.length === 0) {
+
+            alert(
+                "Please select at least one product."
+            );
+
+            return;
+
+        }
+
+
+        let products = [];
+
+
+        selected.forEach(item => {
+
+            products.push(item.value);
+
+        });
+
+
+        alert(
+            "Your customized hamper request has been prepared.\n\n" +
+            "Products:\n" +
+            products.join(", ") +
+            "\n\n" +
+            "We will confirm the final price with you."
+        );
+
+    }
+
+
+    function placeOrder() {
+
+        if (cart.length === 0) {
+
+            alert(
+                "Your cart is empty. Please select a hamper first."
+            );
+
+            return;
+
+        }
+
+
+        const name =
+            document.getElementById("customerName").value.trim();
+
+        const phone =
+            document.getElementById("customerPhone").value.trim();
+
+        const address =
+            document.getElementById("customerAddress").value.trim();
+
+        const city =
+            document.getElementById("customerCity").value.trim();
+
+        const state =
+            document.getElementById("customerState").value.trim();
+
+        const pincode =
+            document.getElementById("customerPincode").value.trim();
+
+
+        if (
+            !name ||
+            !phone ||
+            !address ||
+            !city ||
+            !state ||
+            !pincode
+        ) {
+
+            alert(
+                "Please fill all required customer details."
+            );
+
+            return;
+
+        }
+
+
+        const payment =
+            document.querySelector(
+                'input[name="payment"]:checked'
+            ).value;
+
+
+        let total = 0;
+
+
+        cart.forEach(item => {
+
+            total += item.price;
+
+        });
+
+
+        const letterMessage =
+            document.getElementById(
+                "letterMessage"
+            ).value.trim();
+
+
+        const specialInstructions =
+            document.getElementById(
+                "specialInstructions"
+            ).value.trim();
+
+
+        const order = {
+
+            customer: {
+
+                name: name,
+                phone: phone,
+                address: address,
+                city: city,
+                state: state,
+                pincode: pincode
+
+            },
+
+            items: cart,
+
+            total: total,
+
+            paymentMethod: payment,
+
+            letterMessage: letterMessage,
+
+            specialInstructions:
+                specialInstructions
+
+        };
+
+
+        console.log(
+            "ORDER:",
+            order
+        );
+
+
+        if (payment === "COD") {
+
+            alert(
+                "COD order created successfully!\n\n" +
+                "Customer: " + name +
+                "\nTotal: ₹" + total
+            );
+
+        } else {
+
+            alert(
+                "Online payment will be connected in the next step.\n\n" +
+                "Order amount: ₹" + total
+            );
+
+        }
+
+
+        document
+            .getElementById("successMessage")
+            .style.display = "block";
+
+    }
+
+</script>
+
+</body>
+</html>
