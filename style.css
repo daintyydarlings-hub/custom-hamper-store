@@ -1,0 +1,259 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff7fb;
+    color: #3d2635;
+}
+
+header {
+    background: white;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #8e3d72;
+}
+
+nav a {
+    text-decoration: none;
+    color: #3d2635;
+    margin-left: 20px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.cart-button,
+.main-button {
+    border: 0;
+    background: #8e3d72;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+}
+
+.hero {
+    text-align: center;
+    padding: 90px 20px;
+    background: linear-gradient(135deg, #ffe4f1, #f5ddff);
+}
+
+.hero h1 {
+    font-size: 45px;
+    color: #702653;
+}
+
+.hero p {
+    font-size: 18px;
+}
+
+section {
+    padding: 60px 6%;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.section-title h2 {
+    color: #702653;
+    font-size: 32px;
+}
+
+.hamper-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.hamper-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+}
+
+.hamper-image {
+    height: 220px;
+    background: #f5d9e8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}
+
+.hamper-content {
+    padding: 22px;
+}
+
+.hamper-content h3 {
+    color: #8e3d72;
+    font-size: 25px;
+}
+
+.products {
+    padding-left: 20px;
+    line-height: 1.8;
+}
+
+.price {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.letter-section {
+    background: #fff0f7;
+}
+
+.letter-box,
+.custom-box,
+.checkout-box {
+    max-width: 850px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+}
+
+.letter-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.letter-table th,
+.letter-table td {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.custom-section {
+    background: #f8edff;
+}
+
+.product-select-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.product-option {
+    padding: 14px;
+    border: 1px solid #ead5e3;
+    border-radius: 12px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.form-group textarea {
+    min-height: 100px;
+}
+
+.payment-option {
+    display: block;
+    padding: 15px;
+    margin: 10px 0;
+    background: #fff;
+    border: 1px solid #ead5e3;
+    border-radius: 12px;
+}
+
+.cart {
+    position: fixed;
+    right: -420px;
+    top: 0;
+    width: 400px;
+    max-width: 95%;
+    height: 100%;
+    background: white;
+    z-index: 2000;
+    padding: 25px;
+    box-shadow: -5px 0 20px rgba(0,0,0,.15);
+    transition: .3s;
+    overflow-y: auto;
+}
+
+.cart.open {
+    right: 0;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.close-cart {
+    border: 0;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+}
+
+.cart-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-total {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 25px 0;
+}
+
+footer {
+    background: #3d2635;
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+@media(max-width:700px) {
+
+    nav {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .cart {
+        width: 100%;
+    }
+}
